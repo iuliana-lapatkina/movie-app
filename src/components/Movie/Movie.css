@@ -1,0 +1,33 @@
+.movie-img {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.movie-poster {
+  display: block;
+  box-sizing: border-box;
+  height: 279px;
+}
+
+:where(.css-dev-only-do-not-override-18iikkb).ant-card .ant-card-body {
+  padding: 0;
+  border-radius: 0;
+}
+
+.card-title {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.card-date {
+  margin: 10px 0;
+}
+
+.genre-list {
+  padding: 0;
+}
+
+.card-text {
+  margin: 10px 0;
+}

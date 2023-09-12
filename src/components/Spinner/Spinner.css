@@ -1,0 +1,9 @@
+.movie-list-spin {
+  position: static;
+  padding-top: 30vh;
+}
+
+:where(.css-dev-only-do-not-override-18iikkb).ant-spin-nested-loading >div>.ant-spin .ant-spin-text {
+  padding-top: 16px;
+  font-size: 16px;
+}
