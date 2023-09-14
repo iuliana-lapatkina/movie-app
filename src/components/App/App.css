@@ -10,3 +10,11 @@
   min-height: 95vh;
   background-color: #fff;
 }
+
+.pagination {
+  text-align: center;
+}
+
+:where(.css-dev-only-do-not-override-18iikkb).ant-pagination .ant-pagination-options {
+  display: none;
+}

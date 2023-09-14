@@ -20,8 +20,23 @@ export default class MovieService {
     return res.json();
   }
 
-  async getMovies() {
-    const body = await this.getResource('/search/movie?query=return&include_adult=false&language=en-US&page=2');
+  async getPopularMovies(page) {
+    const body = await this.getResource(`/movie/popular?language=en-US&page=${page}`);
     return body.results;
+  }
+
+  async searchMovies(page, text) {
+    const body = await this.getResource(`/search/movie?query=${text}&include_adult=false&language=en-US&page=${page}`);
+    return body.results;
+  }
+
+  async getCountPopular() {
+    const body = await this.getResource('/movie/popular?language=en-US&page=1');
+    return body.total_pages;
+  }
+
+  async getCountSearch(page, text) {
+    const body = await this.getResource(`/search/movie?query=${text}&include_adult=false&language=en-US&page=${page}`);
+    return body.total_pages;
   }
 }

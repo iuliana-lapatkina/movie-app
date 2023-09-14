@@ -1,8 +1,27 @@
 .movie-list {
   padding: 0;
+  margin-bottom: 15px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 }
 
 .movie-card {
-  width: 460px;
-  height: 280px;
+  width: 495px;
+  min-height: 280px;
+  height: fit-content;
+}
+
+@media (max-width: 1069px) {
+  .movie-card {
+    max-width: 700px;
+  }
+}
+
+@media (max-width: 600px) {
+  .movie-card {
+    max-width: 495px;
+    width: fit-content;
+  }
 }

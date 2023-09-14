@@ -1,23 +1,23 @@
-.movie-img {
+.card-space {
+  align-items: flex-start;
+}
+
+.card-img {
   height: 100%;
   width: 100%;
   overflow: hidden;
 }
 
-.movie-poster {
+.card-poster {
   display: block;
   box-sizing: border-box;
-  height: 279px;
+  height: 280px;
 }
 
-:where(.css-dev-only-do-not-override-18iikkb).ant-card .ant-card-body {
-  padding: 0;
-  border-radius: 0;
-}
 
 .card-title {
   font-size: 18px;
-  margin: 10px 0;
+  margin: 0 0 10px;
 }
 
 .card-date {
@@ -28,6 +28,33 @@
   padding: 0;
 }
 
-.card-text {
-  margin: 10px 0;
+.genre-list div {
+  justify-content: flex-start;
+}
+
+@media (max-width: 600px) {
+  .ant-card-body .card-space {
+    display: initial;
+  }
+
+  .ant-card-body .card-space .ant-space-item:first-child {
+    float: left;
+    margin-right: 10px;
+  }
+
+  .ant-card-body .card-space .ant-space-item:last-child {
+    vertical-align: top;
+  }
+
+  .card-img {
+    float: left;
+  }
+
+  .card-poster {
+    height: 140px;
+  }
+
+  .card-text {
+    display: inline;
+  }
 }
