@@ -127,7 +127,7 @@ export default class App extends Component {
   };
 
   render() {
-    const { movies, loading, onError, currentPage, totalPages, searchWord, nextSearch } = this.state;
+    const { movies, loading, onError, currentPage, totalPages, searchWord } = this.state;
     const total = totalPages * 10 < 500 ? totalPages * 10 : 5000;
     const spinner = loading && !onError ? <Spinner /> : null;
     const moviesList = !loading && !onError ? <MoviesList movies={movies} loading={loading} /> : null;
