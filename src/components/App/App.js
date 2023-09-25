@@ -164,7 +164,7 @@ export default class App extends Component {
               className="error-warning"
               description="You are offline. Please check your internet connection."
               type="error"
-              showIcon
+              // showIcon
             />
           </Offline>
         </div>
