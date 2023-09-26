@@ -1,0 +1,9 @@
+.ant-rate.css-dev-only-do-not-override-18iikkb {
+  font-size: 17px;
+}
+
+@media (max-width: 600px) {
+  .ant-rate.css-dev-only-do-not-override-18iikkb {
+    font-size: 12px;
+  }
+}

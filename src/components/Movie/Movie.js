@@ -25,7 +25,7 @@ function Movie(props) {
             type="circle"
             percent={100}
             size={40}
-            format={() => `${average}`}
+            format={() => `${average.toFixed(1)}`}
             strokeColor={color}
           />
         </div>

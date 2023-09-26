@@ -51,7 +51,6 @@ export default class App extends Component {
   }
 
   getGuestSessionId = () => {
-    const { sessionId } = this.state;
     this.movieService.createGuestSession().then((body) => {
       this.setState({
         sessionId: body,
@@ -130,6 +129,44 @@ export default class App extends Component {
       });
   };
 
+  getRatedMovies = () => {
+    const { sessionId, currentPage } = this.state;
+    this.setState({
+      rated: [],
+      loading: true,
+      onError: false,
+    });
+    let newMovies;
+    this.movieService.getCountRated(sessionId).then((body) => {
+      this.setState({
+        totalPages: Number(body),
+      });
+    });
+    this.movieService
+      .getRatedMovies(sessionId, currentPage)
+      .then((body) => {
+        console.log(body);
+        if (body.length === 0) {
+          this.setState({
+            loading: false,
+            rated: [],
+          });
+          return;
+        }
+        newMovies = body.map((item) => this.transformMovies(item));
+        this.setState({
+          rated: newMovies,
+          loading: false,
+        });
+      })
+      .catch(() => {
+        this.setState({
+          onError: true,
+          loading: false,
+        });
+      });
+  };
+
   changePage = (page) => {
     this.setState({
       loading: true,
@@ -151,15 +188,32 @@ export default class App extends Component {
   };
 
   addRating = (id, newRating) => {
+    const { sessionId } = this.state;
+    this.movieService.addRateMovie(sessionId, id, newRating);
     this.setState(({ movies }) => {
       const index = movies.findIndex((el) => el.id === id);
       const oldItem = movies[index];
       const newItem = { ...oldItem, rating: newRating };
       const newMovies = [...movies.slice(0, index), newItem, ...movies.slice(index + 1)];
+      console.log(newItem);
       return {
         movies: newMovies,
       };
     });
+  };
+
+  TabChange = (activeKey) => {
+    this.setState({
+      currentPage: 1,
+      onError: false,
+      loading: true,
+    });
+    if (activeKey === '1') {
+      this.getMoviesList();
+    }
+    if (activeKey === '2') {
+      this.getRatedMovies();
+    }
   };
 
   render() {
@@ -208,7 +262,8 @@ export default class App extends Component {
           <div>
             {spinner}
             {error}
-            {rated}
+            {ratedList}
+            {pagination}
           </div>
         ),
       },
@@ -219,7 +274,7 @@ export default class App extends Component {
         <div className="container">
           <Online>
             <GenresContextProvider value={genresList}>
-              <Tabs centered defaultActiveKey="1" items={items} />
+              <Tabs centered defaultActiveKey="1" items={items} onChange={this.TabChange} />
             </GenresContextProvider>
           </Online>
           <Offline>
