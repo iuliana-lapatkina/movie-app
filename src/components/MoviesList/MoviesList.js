@@ -6,14 +6,14 @@ import Movie from '../Movie';
 import './MoviesList.css';
 
 function MoviesList(props) {
-  const { movies } = props;
+  const { movies, addRating } = props;
 
   const elements = movies.map((item) => {
     const { id, ...itemProps } = item;
 
     return (
       <Card className="movie-card" key={id}>
-        <Movie id={id} {...itemProps} />
+        <Movie id={id} {...itemProps} addRating={addRating} />
       </Card>
     );
   });

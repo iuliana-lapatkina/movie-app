@@ -1,0 +1,12 @@
+.genre-list {
+  padding: 0;
+}
+
+.genre-list div {
+  justify-content: flex-start;
+}
+
+.ant-col .css-dev-only-do-not-override-18iikkb {
+  margin-left: 0;
+  margin-right: 0;
+}

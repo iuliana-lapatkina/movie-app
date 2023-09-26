@@ -18,18 +18,26 @@
 .card-title {
   font-size: 18px;
   margin: 0 0 10px;
+  padding-right: 40px;
 }
 
 .card-date {
   margin: 10px 0;
 }
 
-.genre-list {
-  padding: 0;
+.card-text div{
+  position: relative;
 }
 
-.genre-list div {
-  justify-content: flex-start;
+.ant-progress.ant-progress-circle {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.ant-progress-circle:where(.css-dev-only-do-not-override-18iikkb).ant-progress-status-success .ant-progress-text {
+  font-size: 14px;
+  color: black;
 }
 
 @media (max-width: 600px) {
