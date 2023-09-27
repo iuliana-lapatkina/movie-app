@@ -53,11 +53,11 @@
 }
 
 @media (max-width: 600px) {
-  .ant-card-body .card-space {
+  .ant-space.css-dev-only-do-not-override-18iikkb.ant-space-horizontal.ant-space-align-center.ant-space-gap-row-small.ant-space-gap-col-small.card-space {
     display: initial;
   }
 
-  .ant-space.css-dev-only-do-not-override-18iikkb.ant-space-horizontal.ant-space-align-center.ant-space-gap-row-small.ant-space-gap-col-small.card-space {
+  .ant-card-body .card-space {
     display: initial;
   }
 
