@@ -2,6 +2,18 @@
   align-items: flex-start;
 }
 
+.ant-card.ant-card-bordered.movie-card.css-dev-only-do-not-override-18iikkb .ant-card-body {
+  padding: 0;
+}
+
+.ant-space.css-dev-only-do-not-override-18iikkb.ant-space-horizontal.ant-space-align-center.ant-space-gap-row-small.ant-space-gap-col-small.card-space .ant-space-item:last-child {
+  padding: 10px;
+}
+
+.ant-space.css-dev-only-do-not-override-18iikkb.ant-space-horizontal.ant-space-align-center.ant-space-gap-row-small.ant-space-gap-col-small.card-space {
+  display: flex;
+}
+
 .card-img {
   height: 100%;
   width: 100%;
@@ -45,9 +57,13 @@
     display: initial;
   }
 
+  .ant-space.css-dev-only-do-not-override-18iikkb.ant-space-horizontal.ant-space-align-center.ant-space-gap-row-small.ant-space-gap-col-small.card-space {
+    display: initial;
+  }
+
   .ant-card-body .card-space .ant-space-item:first-child {
     float: left;
-    margin-right: 10px;
+    margin: 10px;
   }
 
   .ant-card-body .card-space .ant-space-item:last-child {

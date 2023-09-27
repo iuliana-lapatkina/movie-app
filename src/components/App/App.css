@@ -18,3 +18,7 @@
 :where(.css-dev-only-do-not-override-18iikkb).ant-pagination .ant-pagination-options {
   display: none;
 }
+
+.ant-alert.ant-alert-error.ant-alert-with-description.error-warning.css-dev-only-do-not-override-18iikkb {
+  margin-bottom: 20px;
+}

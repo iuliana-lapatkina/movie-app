@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Space, Card } from 'antd';
 
 import Movie from '../Movie';
@@ -20,5 +21,9 @@ function MoviesList(props) {
 
   return <Space className="movie-list">{elements}</Space>;
 }
+
+MoviesList.propTypes = {
+  movies: PropTypes.instanceOf(Array).isRequired,
+};
 
 export default MoviesList;

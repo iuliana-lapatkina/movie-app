@@ -1,28 +1,40 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Rate } from 'antd';
 
 import './Rating.css';
 
 export default class Rating extends Component {
-  state = {
-    rate: 0,
+  state = { rate: 0 };
+
+  static propTypes = {
+    id: PropTypes.number,
+    addRating: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    id: 0,
+  };
+
+  addRate = (val) => {
+    const { rate } = this.state;
+    const { id, addRating } = this.props;
+    addRating(id, val);
+    this.setState({
+      rate: val,
+    });
   };
 
   render() {
-    const { id, addRating } = this.props;
-    const { rate } = this.state;
+    const { rating } = this.props;
     return (
       <Rate
         allowHalf
         defaultValue={0}
         onChange={(val) => {
-          addRating(id, val);
-          this.setState({
-            rate: val,
-          });
-          console.log(val);
+          this.addRate(val);
         }}
-        value={rate}
+        value={rating}
         count={10}
       />
     );

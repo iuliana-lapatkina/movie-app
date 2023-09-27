@@ -29,24 +29,14 @@ export default class MovieService {
     return body.guest_session_id;
   }
 
-  async getPopularMovies(page) {
+  async getPopularMovies(page = 1) {
     const body = await this.getResource(`${this.urlPopular}&page=${page}&api_key=${this._apiKey}`);
-    return body.results;
-  }
-
-  async getCountPopular() {
-    const body = await this.getResource(`${this.urlPopular}&page=1&api_key=${this._apiKey}`);
-    return body.total_pages;
+    return body;
   }
 
   async searchMovies(page, text) {
     const body = await this.getResource(`${this.urlSearch}&query=${text}&page=${page}&api_key=${this._apiKey}`);
-    return body.results;
-  }
-
-  async getCountSearch(page, text) {
-    const body = await this.getResource(`${this.urlSearch}&query=${text}&page=${page}&api_key=${this._apiKey}`);
-    return body.total_pages;
+    return body;
   }
 
   async getGenres() {
@@ -55,7 +45,6 @@ export default class MovieService {
   }
 
   async addRateMovie(sessionId, id, rating) {
-    console.log(sessionId, id, rating);
     const postOptions = {
       method: 'POST',
       headers: { accept: 'application/json', 'Content-Type': 'application/json;charset=utf-8' },
@@ -74,11 +63,6 @@ export default class MovieService {
     const body = await this.getResource(
       `/guest_session/${sessionId}/rated/movies?api_key=${this._apiKey}&page=${page}`
     );
-    return body.results;
-  }
-
-  async getCountRated(sessionId) {
-    const body = await this.getResource(`/guest_session/${sessionId}/rated/movies?api_key=${this._apiKey}&page=1`);
-    return body.total_pages;
+    return body;
   }
 }

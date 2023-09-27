@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col, Tag } from 'antd';
 
 import { GenresContextConsumer } from '../GenresContext';
@@ -27,5 +28,9 @@ function GenreList(props) {
     </GenresContextConsumer>
   );
 }
+
+GenreList.propTypes = {
+  genres: PropTypes.instanceOf(Array).isRequired,
+};
 
 export default GenreList;

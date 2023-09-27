@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import { format, parseISO } from 'date-fns';
 import { Offline, Online } from 'react-detect-offline';
 import { Alert, Pagination, Tabs } from 'antd';
@@ -24,8 +24,10 @@ export default class App extends Component {
       rated: [],
       loading: true,
       onError: false,
+      notFound: false,
       currentPage: 1,
       totalPages: 1,
+      currentTab: 1,
       searchWord: '',
     };
     this.getMoviesList = this.getMoviesList.bind(this);
@@ -34,19 +36,27 @@ export default class App extends Component {
   componentDidMount() {
     this.getGuestSessionId();
     this.getGenresList();
-    this.getMoviesList();
   }
 
   componentDidUpdate(nextState, prevState) {
-    const { currentPage, searchWord } = this.state;
-    if (currentPage !== prevState.currentPage && prevState.searchWord === '') {
+    const { sessionId, currentPage, searchWord, currentTab } = this.state;
+    if (sessionId && !prevState.sessionId) {
       this.getMoviesList();
     }
-    if (prevState.searchWord !== '' && searchWord === '') {
+    if (
+      (currentPage !== prevState.currentPage && prevState.searchWord === '') ||
+      (prevState.searchWord !== '' && searchWord === '')
+    ) {
       this.getMoviesList();
+    }
+    if (currentPage !== prevState.currentPage && currentTab === 2) {
+      this.getRatedMovies();
     }
     if (prevState.searchWord === searchWord && currentPage !== prevState.currentPage && searchWord) {
       this.nextSearch();
+    }
+    if (currentPage !== prevState.currentPage) {
+      window.scrollTo(0, 0);
     }
   }
 
@@ -67,26 +77,31 @@ export default class App extends Component {
   };
 
   getMoviesList = () => {
-    const { currentPage } = this.state;
+    const { currentPage, rated } = this.state;
+    this.startLoading();
     let newMovies;
-    this.movieService.getCountPopular().then((body) => {
-      this.setState({
-        totalPages: Number(body),
-      });
-    });
+    let total;
     this.movieService
       .getPopularMovies(currentPage)
       .then((body) => {
-        newMovies = body.map((item) => this.transformMovies(item));
+        total = body.total_pages;
+        newMovies = body.results.map((item) => this.transformMovies(item));
+        newMovies = newMovies.map((item) => {
+          const ratedItem = rated.find((el) => el.id === item.id);
+          if (ratedItem) {
+            item.rating = ratedItem.rating;
+          }
+          return item;
+        });
         this.setState({
+          totalPages: Number(total),
           movies: newMovies,
           loading: false,
+          notFound: false,
         });
       })
       .catch(() => {
-        this.setState({
-          onError: true,
-        });
+        this.createError();
       });
   };
 
@@ -105,17 +120,17 @@ export default class App extends Component {
     if (searchText !== searchWord) {
       page = 1;
     }
+    this.startLoading();
     let newMovies;
-    this.movieService.getCountSearch(page, searchText).then((body) => {
-      this.setState({
-        totalPages: Number(body),
-      });
-    });
+    let total;
     this.movieService
       .searchMovies(page, searchText)
       .then((body) => {
-        newMovies = body.map((item) => this.transformMovies(item));
+        total = body.total_pages;
+        newMovies = body.results.map((item) => this.transformMovies(item));
+        this.notFound(newMovies);
         this.setState({
+          totalPages: Number(total),
           movies: newMovies,
           loading: false,
           searchWord: searchText,
@@ -123,47 +138,30 @@ export default class App extends Component {
         });
       })
       .catch(() => {
-        this.setState({
-          onError: true,
-        });
+        this.createError();
       });
   };
 
   getRatedMovies = () => {
     const { sessionId, currentPage } = this.state;
-    this.setState({
-      rated: [],
-      loading: true,
-      onError: false,
-    });
+    this.startLoading();
     let newMovies;
-    this.movieService.getCountRated(sessionId).then((body) => {
-      this.setState({
-        totalPages: Number(body),
-      });
-    });
+    let total;
     this.movieService
       .getRatedMovies(sessionId, currentPage)
       .then((body) => {
-        console.log(body);
-        if (body.length === 0) {
-          this.setState({
-            loading: false,
-            rated: [],
-          });
-          return;
-        }
-        newMovies = body.map((item) => this.transformMovies(item));
+        total = body.total_pages;
+        newMovies = body.results.map((item) => this.transformMovies(item));
         this.setState({
+          totalPages: Number(total),
           rated: newMovies,
           loading: false,
+          notFound: false,
         });
+        this.notFound(newMovies);
       })
       .catch(() => {
-        this.setState({
-          onError: true,
-          loading: false,
-        });
+        this.createError();
       });
   };
 
@@ -174,9 +172,33 @@ export default class App extends Component {
     });
   };
 
+  createError = () => {
+    this.setState({
+      onError: true,
+      loading: false,
+    });
+  };
+
+  startLoading = () => {
+    this.setState({
+      onError: false,
+      loading: true,
+    });
+  };
+
+  notFound = (arr) => {
+    if (arr.length === 0) {
+      this.setState({
+        notFound: true,
+        loading: false,
+      });
+    }
+  };
+
   transformMovies = (movie) => {
     return {
       id: movie.id,
+      rating: movie.rating,
       title: movie.title || 'Untitled',
       average: movie.vote_average,
       date: movie.release_date ? format(parseISO(movie.release_date), 'MMMM dd, yyyy') : null,
@@ -195,11 +217,18 @@ export default class App extends Component {
       const oldItem = movies[index];
       const newItem = { ...oldItem, rating: newRating };
       const newMovies = [...movies.slice(0, index), newItem, ...movies.slice(index + 1)];
-      console.log(newItem);
       return {
         movies: newMovies,
       };
     });
+  };
+
+  changeRating = (id, newRating) => {
+    const { sessionId } = this.state;
+    this.movieService.addRateMovie(sessionId, id, newRating);
+    setTimeout(() => {
+      this.getRatedMovies();
+    }, 500);
   };
 
   TabChange = (activeKey) => {
@@ -210,19 +239,31 @@ export default class App extends Component {
     });
     if (activeKey === '1') {
       this.getMoviesList();
+      this.setState({
+        currentTab: 1,
+      });
     }
     if (activeKey === '2') {
+      this.setState({
+        currentTab: 2,
+      });
       this.getRatedMovies();
     }
   };
 
   render() {
-    const { movies, rated, genresList, loading, onError, currentPage, totalPages, searchWord, rating } = this.state;
+    const { notFound, movies, rated, genresList, loading, onError, currentPage, totalPages, searchWord, currentTab } =
+      this.state;
     const total = totalPages * 10 < 500 ? totalPages * 10 : 5000;
     const spinner = loading && !onError ? <Spinner /> : null;
     const moviesList =
-      !loading && !onError ? <MoviesList movies={movies} loading={loading} addRating={this.addRating} /> : null;
-    const ratedList = !loading && !onError ? <MoviesList movies={rated} loading={loading} /> : null;
+      !loading && !onError ? (
+        <MoviesList currentTab={currentTab} movies={movies} loading={loading} addRating={this.addRating} />
+      ) : null;
+    const ratedList =
+      !loading && !onError ? (
+        <MoviesList currentTab={currentTab} movies={rated} loading={loading} addRating={this.changeRating} />
+      ) : null;
     const search =
       !loading && !onError ? (
         <Search searchWord={searchWord} firstSearch={this.firstSearch} nextSearch={this.nextSearch} />
@@ -230,8 +271,11 @@ export default class App extends Component {
     const error = onError ? (
       <Alert className="error-warning" description="The download failed. Please, try later" type="error" showIcon />
     ) : null;
+    const foundError = notFound ? (
+      <Alert className="error-warning" description="Nothing found" type="error" showIcon />
+    ) : null;
     const pagination =
-      !loading && !onError ? (
+      !loading && !onError && !notFound ? (
         <Pagination
           className="pagination"
           defaultCurrent={1}
@@ -251,6 +295,7 @@ export default class App extends Component {
             {error}
             {search}
             {moviesList}
+            {foundError}
             {pagination}
           </div>
         ),
@@ -263,6 +308,7 @@ export default class App extends Component {
             {spinner}
             {error}
             {ratedList}
+            {foundError}
             {pagination}
           </div>
         ),
