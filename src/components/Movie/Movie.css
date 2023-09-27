@@ -2,15 +2,15 @@
   align-items: flex-start;
 }
 
-.ant-card.ant-card-bordered.movie-card.css-dev-only-do-not-override-18iikkb .ant-card-body {
+:where(.css-18iikkb).ant-card .ant-card-body {
   padding: 0;
 }
 
-.ant-space.css-dev-only-do-not-override-18iikkb.ant-space-horizontal.ant-space-align-center.ant-space-gap-row-small.ant-space-gap-col-small.card-space .ant-space-item:last-child {
+:where(.css-18iikkb).ant-card .ant-space-item:last-child {
   padding: 10px;
 }
 
-.ant-space.css-dev-only-do-not-override-18iikkb.ant-space-horizontal.ant-space-align-center.ant-space-gap-row-small.ant-space-gap-col-small.card-space {
+:where(.css-18iikkb).ant-space {
   display: flex;
 }
 
@@ -47,13 +47,13 @@
   right: 0;
 }
 
-.ant-progress-circle:where(.css-dev-only-do-not-override-18iikkb).ant-progress-status-success .ant-progress-text {
+.ant-progress-circle:where(.css-18iikkb).ant-progress-status-success .ant-progress-text {
   font-size: 14px;
   color: black;
 }
 
 @media (max-width: 600px) {
-  .ant-space.css-dev-only-do-not-override-18iikkb.ant-space-horizontal.ant-space-align-center.ant-space-gap-row-small.ant-space-gap-col-small.card-space {
+  :where(.css-18iikkb).ant-space {
     display: initial;
   }
 

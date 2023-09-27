@@ -6,6 +6,6 @@
   justify-content: flex-start;
 }
 
-.ant-col .css-dev-only-do-not-override-18iikkb {
+:where(.css-18iikkb).ant-col {
   margin: 2px -3px;
 }

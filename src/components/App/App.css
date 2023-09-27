@@ -15,10 +15,13 @@
   text-align: center;
 }
 
-:where(.css-dev-only-do-not-override-18iikkb).ant-pagination .ant-pagination-options {
+:where(.css-18iikkb).ant-pagination .ant-pagination-options {
   display: none;
 }
 
+:where(.css-18iikkb).ant-pagination .ant-pagination-options {
+  margin-top: 10px;
+}
 .ant-alert.ant-alert-error.ant-alert-with-description.error-warning.css-dev-only-do-not-override-18iikkb {
   margin-bottom: 20px;
 }

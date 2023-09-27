@@ -228,7 +228,7 @@ export default class App extends Component {
     this.movieService.addRateMovie(sessionId, id, newRating);
     setTimeout(() => {
       this.getRatedMovies();
-    }, 500);
+    }, 1500);
   };
 
   TabChange = (activeKey) => {
